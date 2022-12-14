@@ -1,0 +1,28 @@
+{
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts", "dist"],
+  "compilerOptions": {
+    "module": "CommonJS",
+    "lib": ["ES2018"],
+    "target": "ES2022",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "rootDir": "src",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true, // allow default import
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    // "allowJs": true,
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "incremental": true,
+    // "importHelpers": true, // it cause to break the code
+    // "declaration": true, // generate .js file in same folder
+    "newLine": "LF"
+  }
+}
