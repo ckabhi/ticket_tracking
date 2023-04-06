@@ -1,38 +1,34 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { signToken } from "../../middleware/AuthProvider";
-import { UserModel } from "../../schema/User.schema";
-import { User } from "../../schema/interface/User.interface";
-import { generateHash } from "../../helper/commom.helper";
-import { ResponseBuilder } from "../../helper/response.helper";
+import {
+  signToken,
+  verifyToken,
+} from "../../middleware/AuthProvider.middleware";
+import {
+  authenticateUser,
+  checkDuplicate,
+  getProfile,
+  registerAccount,
+  updatePassword,
+  updateProfile,
+} from "../../middleware/Account.middleware";
 
 const route = Router();
 
 route.get("/", async (req: Request, res: Response) => {
-  const tk = await signToken({ name: "foo" });
   res.status(200).json({
     msg: "Accoun is working from docker new",
-    token: tk,
+    token: "",
   });
 });
 
-route.post(
-  "/create",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      let body: User = req.body;
-      const encryptedPassword = await generateHash(body.password);
-      if (encryptedPassword != null) body.password = encryptedPassword;
+route.post("/create", checkDuplicate, registerAccount, signToken);
 
-      const user = new UserModel(body);
-      const result = await user.save();
-      console.log(result);
-      res.locals._user = result;
+route.post("/login", authenticateUser, signToken);
 
-      res.status(200).json(ResponseBuilder.successResponse(result));
-    } catch (error) {
-      console.error(error);
-    }
-  }
-);
+route.put("/profile", verifyToken, updateProfile);
+
+route.get("/profile", verifyToken, getProfile);
+
+route.put("/password", verifyToken, updatePassword);
 
 export default route;

@@ -5,6 +5,7 @@ import accountRoutes from "./routes/accounts/account";
 import { Logger } from "./helper/logger";
 import app from "./core/server";
 import { ResponseBuilder } from "./helper/response.helper";
+import dashboard from "./routes/dashboard/dashboard";
 
 const port = process.env.PORT;
 const dbUserName = process.env.DB_USERNAME;
@@ -33,6 +34,7 @@ db.once("open", () => {
 });
 
 app.use("/account", accountRoutes);
+app.use("/dashboard", dashboard);
 
 // 404 routes
 

@@ -1,10 +1,30 @@
 import { Router, Request, Response } from "express";
-const routes = Router();
+import { verifyToken } from "../../middleware/AuthProvider.middleware";
+import {
+  addTodo,
+  deleteTodo,
+  todoItem,
+  todoList,
+  updateTodo,
+} from "../../middleware/Dashboard.middleware";
+const route = Router();
 
-routes.get("/", (req: Request, res: Response) => {
-  throw new Error("");
-
+route.get("/", (req: Request, res: Response) => {
   res.status(200).json({
     msg: "dashboard is working",
   });
 });
+
+route.post("/todos", verifyToken, addTodo);
+
+route.put("/todos/:todoId", verifyToken, updateTodo);
+
+route.get("/todos", verifyToken, todoList);
+
+route.get("/todos/:todoId", verifyToken, todoItem);
+
+route.delete("/todos/:todoId", verifyToken, deleteTodo);
+
+route.post("/todos/:todoId/comments", verifyToken);
+
+export default route;

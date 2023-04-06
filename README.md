@@ -1,5 +1,5 @@
 ## Todo App ##
-
+Todo app with monolith architecture
 ## Frontend ##
 - To run frontend
   - > npm start
