@@ -1,13 +1,16 @@
-import { HTTP_ERROR } from "../actionType/coreActionType";
+import { HTTP_ERROR, HTTP_FETCH } from "../actionType/coreActionType";
+import { HttpPayload } from "../interface/HttpInterface";
 
-interface errorData {
-  errorCode: number;
-  errorMessage: string;
-  other?: any;
-}
-export const httpFetchError = (data: errorData) => {
+export const httpFetchError = (data: HttpPayload) => {
   return {
     type: HTTP_ERROR,
+    payload: data,
+  };
+};
+
+export const httpFetchRequest = (data: HttpPayload) => {
+  return {
+    type: HTTP_FETCH,
     payload: data,
   };
 };
