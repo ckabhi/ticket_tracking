@@ -1,5 +1,6 @@
 import { Middleware } from "@reduxjs/toolkit";
 import { getApiRegistry } from "../api/apiRegistry";
+import { HTTP_ERROR } from "../actionType/coreActionType";
 
 export const myMiddleware: Middleware =
   (storeAPI) => (next) => async (action) => {
@@ -15,6 +16,7 @@ export const myMiddleware: Middleware =
       const response = await fetchCall(action);
       const responseData = postOp(await response.json());
 
+      // Execute success handler
       if (response.ok && response.status === 200) {
         const OnSuccessHandler = onSuccess(responseData);
         if (Array.isArray(OnSuccessHandler)) {
@@ -23,9 +25,10 @@ export const myMiddleware: Middleware =
           });
         }
       } else {
+        // Execute error handler
         const errorData = {
-          status: response.status,
-          message: Object.keys(responseData).length ? responseData : "",
+          errorCode: response.status,
+          errorMessage: Object.keys(responseData).length ? responseData : "",
         };
         const OnErrorHandler = onError(errorData);
         if (Array.isArray(OnErrorHandler)) {
@@ -33,6 +36,12 @@ export const myMiddleware: Middleware =
             next(err);
           });
         }
+
+        // set httpError
+        next({ type: HTTP_ERROR, payload: { isError: true, ...errorData } });
+        setTimeout(() => {
+          next({ type: HTTP_ERROR, payload: {} });
+        }, 3000);
       }
     } catch (error) {
       return next(action);

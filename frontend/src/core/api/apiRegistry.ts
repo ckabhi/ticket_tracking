@@ -7,8 +7,8 @@ export const registerApiHandler = (
   options: OptionsType
 ) => {
   if (Object.hasOwn(API_REGISTRY, actionType)) {
-    console.error(`An Api is already register with name ${actionType}`);
-    return;
+    console.warn(`An Api is already register with name ${actionType}`);
+    // return;
   }
   API_REGISTRY[actionType] = options;
 };

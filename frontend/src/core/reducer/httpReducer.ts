@@ -1,15 +1,19 @@
 import { createReducer } from "./baseReducer";
 import { HTTP_ERROR } from "../actionType/coreActionType";
 
-const httpError = {
-  [HTTP_ERROR]: (state: any, action: any) => {
-    const { payload } = action;
+const default_state = {
+  httpError: false,
+  errorCode: null,
+  errorMessage: null,
+};
 
+const httpError = {
+  [HTTP_ERROR]: (state: any = default_state, action: any) => {
+    const { payload } = action;
     return {
-      ...state,
-      httpError: true,
-      errorCode: payload.errorCode,
-      errorMessage: payload.errorMessage,
+      httpError: payload?.isError || false,
+      errorCode: payload?.errorCode || null,
+      errorMessage: payload?.errorMessage || null,
     };
   },
 };
