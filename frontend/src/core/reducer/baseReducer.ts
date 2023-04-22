@@ -1,6 +1,3 @@
-import { combineReducers } from "@reduxjs/toolkit";
-import httpReducer from "./httpReducer";
-
 interface reducerRegistryType {
   [index: string]: boolean;
 }
