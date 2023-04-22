@@ -5,7 +5,8 @@
   "source": "src/index.tsx",
   "main": "dist/main.js",
   "scripts": {
-    "start": "parcel src/index.html --open -p 3000",
+    "dev": "parcel src/index.html --open -p 3000",
+    "start": "parcel src/index.html -p 3000",
     "build": "parcel build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

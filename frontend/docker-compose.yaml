@@ -1,0 +1,9 @@
+version: "3.3"
+services:
+  ticket-system:
+    image: ticket-system-frontend
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/app/frontend
