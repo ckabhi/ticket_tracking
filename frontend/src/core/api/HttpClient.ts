@@ -5,6 +5,9 @@ import {
   RouteParametersType,
 } from "../interface/HttpInterface";
 import { generateUrlString } from "./HttpUtils";
+type RequestObjectType = {
+  [index in HttpMethod]: any;
+};
 
 export const httpRegister = (
   method: HttpMethod,
