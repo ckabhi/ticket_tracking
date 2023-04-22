@@ -1,10 +1,10 @@
 import TestCompo from "components/testComponents/TestComp";
 import { useState } from "react";
-import { GetRequest } from "../api/HttpRequest";
 import { useDispatch } from "react-redux";
 import {
   fetchTodoDetails,
   notApiCall,
+  fetchTodoList,
 } from "../redux/action/todos/todos.action";
 
 export function App() {
@@ -19,6 +19,7 @@ export function App() {
 
   const performNetworkRequest = async (id: string) => {
     try {
+      dispatch(fetchTodoList());
       dispatch(fetchTodoDetails({ userId: id }));
       // dispatch(notApiCall({ userId: id }));
     } catch (error) {

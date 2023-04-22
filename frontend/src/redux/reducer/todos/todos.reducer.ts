@@ -1,9 +1,12 @@
 import { createReducer } from "../../../core/reducer/baseReducer";
 import {
+  ERROR_TODO_LIST,
   FETCH_TODO_DETAILS,
   FETCH_TODO_DETAILS_ERROR,
   NOT_API_CALL,
+  REQUEST_TODO_LIST,
   SAVE_FETCHED_TODO_DETAILS,
+  SAVE_TODO_LIST,
 } from "../../actionType/actionType";
 import {
   SaveTodoDetailsAction,
@@ -30,6 +33,7 @@ const todoDetailsReducer = {
   [FETCH_TODO_DETAILS_ERROR]: (state: any = {}, action: any) => {
     return {
       ...state,
+      fetchingTodoDetails: false,
       todoDetailsError: true,
       error: action.error,
     };
@@ -42,4 +46,29 @@ const todoDetailsReducer = {
   },
 };
 
-export default createReducer({ todoDetailsReducer });
+const todoList = {
+  [REQUEST_TODO_LIST]: (state: any = {}, action: any) => {
+    return {
+      ...state,
+      fetchingTodoList: true,
+    };
+  },
+  [SAVE_TODO_LIST]: (state: any = {}, action: any) => {
+    return {
+      ...state,
+      fetchingTodoList: false,
+      todoList: action.data,
+    };
+  },
+
+  [ERROR_TODO_LIST]: (state: any = {}, action: any) => {
+    return {
+      ...state,
+      fetchingTodoList: false,
+      todoListError: true,
+      error: action.error,
+    };
+  },
+};
+
+export default createReducer({ todoDetailsReducer, todoList });
