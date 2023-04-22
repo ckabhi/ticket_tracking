@@ -26,3 +26,9 @@ export interface RequestBodyType {
 export interface RouteParametersType {
   [index: string]: any;
 }
+
+export interface FetchConfigType {
+  method: HttpMethod;
+  headers: any;
+  body?: any;
+}

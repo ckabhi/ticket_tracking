@@ -1,13 +1,10 @@
 import {
+  FetchConfigType,
   HttpMethod,
   RequestBodyType,
   RouteParametersType,
 } from "../interface/HttpInterface";
 import { generateUrlString } from "./HttpUtils";
-
-type RequestObjectType = {
-  [index in HttpMethod]: any;
-};
 
 export const httpRegister = (
   method: HttpMethod,
@@ -15,28 +12,21 @@ export const httpRegister = (
   routeParameters: RouteParametersType = {},
   body: RequestBodyType = {}
 ) => {
-  return requestObject[method](path, routeParameters);
+  const url = generateUrlString(path, routeParameters);
+  return fetchApi(url, method, body);
 };
 
-const requestObject: RequestObjectType = {
-  GET: (path: string, routeParameters: RouteParametersType) => {
-    const url = generateUrlString(path, routeParameters);
-    return fetch(url);
-  },
-  POST: (path: string, routeParameters: RouteParametersType) => {
-    const url = generateUrlString(path, routeParameters);
-    return fetch(url);
-  },
-  PUT: (path: string, routeParameters: RouteParametersType) => {
-    const url = generateUrlString(path, routeParameters);
-    return fetch(url);
-  },
-  PATCH: (path: string, routeParameters: RouteParametersType) => {
-    const url = generateUrlString(path, routeParameters);
-    return fetch(url);
-  },
-  DELETE: (path: string, routeParameters: RouteParametersType) => {
-    const url = generateUrlString(path, routeParameters);
-    return fetch(url);
-  },
+const fetchApi = (url: any, method: HttpMethod, body: any) => {
+  const config: FetchConfigType = {
+    method: method,
+    headers: {
+      "Content-Type":
+        body instanceof FormData ? "multipart/form-data" : "application/json",
+    },
+  };
+  if (method == "POST" || method == "PUT" || method == "PATCH") {
+    config["body"] = body instanceof FormData ? body : JSON.stringify(body);
+  }
+
+  return fetch(url, config);
 };
