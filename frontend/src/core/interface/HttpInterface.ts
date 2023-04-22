@@ -31,4 +31,5 @@ export interface FetchConfigType {
   method: HttpMethod;
   headers: any;
   body?: any;
+  [index: string]: any;
 }
