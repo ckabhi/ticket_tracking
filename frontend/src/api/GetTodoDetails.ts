@@ -4,11 +4,15 @@ import {
   fetchTodoDetailsError,
 } from "../redux/action/todos/todos.action";
 import { registerApiHandler } from "../core/api/apiRegistry";
-import { httpRegister } from "../core/api/HttpClient";
+import { httpService } from "../core/api/HttpClient";
 import { getTodoDetails } from "./routes";
 
 const fetchTodoDetails = (action: any) => {
-  return httpRegister("GET", getTodoDetails, action?.query);
+  return httpService({
+    method: "GET",
+    path: getTodoDetails,
+    routeParameters: action?.query,
+  });
 };
 const onSuccess = (data: any) => [saveFetchedTodoDetails(data)];
 const onError = (error: any) => [fetchTodoDetailsError(error)];

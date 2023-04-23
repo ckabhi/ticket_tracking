@@ -4,11 +4,15 @@ import {
   errorTodoList,
 } from "../redux/action/todos/todos.action";
 import { registerApiHandler } from "../core/api/apiRegistry";
-import { httpRegister } from "../core/api/HttpClient";
+import { httpService } from "../core/api/HttpClient";
 import { getTodos } from "./routes";
 
 const fetchTodoList = (action: any) => {
-  return httpRegister("GET", getTodos, action?.query);
+  return httpService({
+    method: "GET",
+    path: getTodos,
+    routeParameters: action?.query,
+  });
 };
 const onSuccess = (data: any) => [saveTodoList(data)];
 const onError = (error: any) => [errorTodoList(error)];

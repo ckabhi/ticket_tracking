@@ -33,3 +33,10 @@ export interface FetchConfigType {
   body?: any;
   [index: string]: any;
 }
+
+export interface RequestOptions {
+  method: HttpMethod;
+  path: string;
+  routeParameters?: RouteParametersType;
+  body?: RequestBodyType;
+}
