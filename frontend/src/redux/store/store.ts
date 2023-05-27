@@ -1,6 +1,6 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { rootReducer } from "../reducer/rootReducer";
-import { userLogin } from "../action/account/account";
+// import { userLogin } from "../action/account/account.action";
 import { myMiddleware } from "../../core/middleware/http.middleware";
 
 const configureAppStore = (initialState = {}) => {
