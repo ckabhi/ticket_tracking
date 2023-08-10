@@ -5,19 +5,25 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
-import Authentication from "./pages/Authentication";
+// import Authentication from "./pages/Authentication";
+import Layout from "./layout/Layout";
+import routes from "../routes";
 
 export function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
-      element: <Authentication />,
+      // path: "/",
+      // element: <Authentication />,
+      element: <Layout />,
+      // TODO:: Error element is used to render the page if path is not existed
+      // errorElement: <ErrorPage/>
+      children: routes,
     },
   ]);
 
   return (
     <>
-      <NavBar />
+      {/* <NavBar /> */}
       <RouterProvider router={router} />
     </>
   );
