@@ -1,6 +1,7 @@
 import { User } from "../schema/interface/User.interface";
 import { compareHash, generateHash } from "../helper/commom.helper";
 import { UserModel } from "../schema/User.schema";
+import { AuthData } from "../schema/interface/AuthData.interface";
 
 export const isDuplicate = async (email: string) => {
   const user: any = await UserModel.findOne({ email: email });
@@ -58,8 +59,8 @@ export const validateUser = async (email: string, password: string) => {
   return false;
 };
 
-export const getUserById = async (userId: string) => {
-  return await UserModel.findById(userId).exec();
+export const getUserById = async (userId: string, select: string = "") => {
+  return await UserModel.findById(userId).select(select).exec();
 };
 
 export const getUserByEmail = async (email: string) => {
@@ -74,4 +75,41 @@ export const getAllUser = async () => {
   });
 
   return userList;
+};
+
+export const insertAuthData = async (payload: AuthData, userId: string) => {
+  return await UserModel.updateOne(
+    { _id: userId },
+    { $push: { authData: payload } }
+  );
+};
+
+export const validateRefreshToken = async (
+  userId: string,
+  refreshToken: string
+) => {
+  const refreshTokens = await UserModel.find({
+    _id: userId,
+    authData: {
+      $elemMatch: { refreshToken: refreshToken, isActive: true },
+    },
+  }).select("authData");
+  if (refreshTokens.length) return true;
+  return false;
+};
+
+export const inValidateRefreshToken = async (
+  userId: string,
+  type: "one" | "all",
+  refreshToken?: string
+) => {
+  if (type === "one") {
+    return await UserModel.updateOne(
+      { _id: userId, "authData.refreshToken": refreshToken },
+      { $set: { "authData.$.isActive": false } }
+    );
+  }
+  return await UserModel.findByIdAndUpdate(userId, {
+    $set: { "authData.$[].isActive": false },
+  });
 };

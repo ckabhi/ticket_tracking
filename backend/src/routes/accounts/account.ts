@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import {
-  signToken,
+  authentication,
+  refreshAccessToken,
   verifyToken,
 } from "../../middleware/AuthProvider.middleware";
 import {
@@ -21,14 +22,16 @@ route.get("/", async (req: Request, res: Response) => {
   });
 });
 
-route.post("/create", checkDuplicate, registerAccount, signToken);
+route.post("/create", checkDuplicate, registerAccount, authentication);
 
-route.post("/login", authenticateUser, signToken);
+route.post("/login", authenticateUser, authentication);
 
 route.put("/profile", verifyToken, updateProfile);
 
 route.get("/profile", verifyToken, getProfile);
 
 route.put("/password", verifyToken, updatePassword);
+
+route.post("/refresh", verifyToken, refreshAccessToken);
 
 export default route;

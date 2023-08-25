@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { User } from "./interface/User.interface";
 import { AuthLog } from "./interface/AuthLog.interface";
+import { AuthData } from "./interface/AuthData.interface";
 
 export const userSchema = new Schema<User>(
   {
@@ -14,6 +15,7 @@ export const userSchema = new Schema<User>(
         status: { type: String, required: true },
       }),
     },
+    authData: Array<AuthData>,
   },
   {
     timestamps: true,

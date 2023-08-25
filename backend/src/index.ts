@@ -1,5 +1,6 @@
 import bodyparser, { BodyParser } from "body-parser";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import accountRoutes from "./routes/accounts/account";
@@ -13,7 +14,13 @@ const dbUserName = process.env.DB_USERNAME;
 const dbPassword = process.env.DB_PASSWORD;
 const dbLink = process.env.DB_LINK;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 
