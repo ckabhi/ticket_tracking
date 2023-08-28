@@ -13,7 +13,11 @@ import {
   insertAuthData,
   validateRefreshToken,
 } from "../model/account.model";
-import { ACCESS_TOKEN_VALIDITY, REFRESH_TOKEN_VALIDITY } from "../config/const";
+import {
+  ACCESS_TOKEN_VALIDITY,
+  AUTH_TOKEN_TYPE,
+  REFRESH_TOKEN_VALIDITY,
+} from "../config/const";
 
 export const verifyToken = async (
   req: Request,
@@ -29,9 +33,15 @@ export const verifyToken = async (
         .status(UNAUTHORIZED_ERROR)
         .json(ResponseBuilder.errorResponse("missing authentication token"));
 
-    const result = await verifyJwtToken(token);
+    const result: any = await verifyJwtToken(token);
     res.locals._user = result;
     res.locals._token = token;
+    if (
+      req.originalUrl !== "/account/refresh" &&
+      result.type === AUTH_TOKEN_TYPE.refresh
+    )
+      throw new Error("received refresh token instead of access token");
+
     next();
   } catch (error) {
     return res
@@ -51,11 +61,11 @@ export const authentication = async (
     const { name, _id, email } = res.locals._user;
     const ip = req.connection.remoteAddress || "";
     const refreshToken = await signJwtToken(
-      { name, _id, email, type: "refresh", access: "*" },
+      { name, _id, email, type: AUTH_TOKEN_TYPE.refresh, access: "*" },
       REFRESH_TOKEN_VALIDITY
     );
     const accessToken = await signJwtToken(
-      { name, _id, email, type: "access", access: "*" },
+      { name, _id, email, type: AUTH_TOKEN_TYPE.access, access: "*" },
       ACCESS_TOKEN_VALIDITY
     );
     const authData: AuthData = {
@@ -107,11 +117,11 @@ export const refreshAccessToken = async (
 
       await inValidateRefreshToken(_id, "one", res.locals._token);
       const refreshToken = await signJwtToken(
-        { _id, name, email, type, access },
+        { _id, name, email, type: AUTH_TOKEN_TYPE.refresh, access },
         REFRESH_TOKEN_VALIDITY
       );
       const accessToken = await signJwtToken(
-        { _id, name, email, type, access },
+        { _id, name, email, type: AUTH_TOKEN_TYPE.access, access },
         ACCESS_TOKEN_VALIDITY
       );
       const authData: AuthData = {
