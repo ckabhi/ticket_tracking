@@ -39,4 +39,5 @@ export interface RequestOptions {
   path: string;
   routeParameters?: RouteParametersType;
   body?: RequestBodyType;
+  isProtected?: boolean;
 }

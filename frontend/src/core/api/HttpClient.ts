@@ -1,18 +1,31 @@
-import { HttpMethod, RequestOptions } from "../interface/HttpInterface";
-import { generateUrlString } from "./HttpUtils";
+import { RequestOptions } from "../interface/HttpInterface";
+import { generateUrlString, isTokenExpired } from "./HttpUtils";
+import { SecureStorage } from "../../redux/store/store";
+import { refreshToken as refreshTokenUrl } from "../../api/routes";
 
-export const httpService = ({
-  method,
-  path,
-  routeParameters = {},
-  body = {},
-}: RequestOptions) => {
+export const httpService = (
+  { method, path, routeParameters = {}, body = {} }: RequestOptions,
+  isProtected = false
+) => {
   const url = generateUrlString(path, routeParameters);
 
-  const headers = {
-    "Content-Type":
-      body instanceof FormData ? "multipart/form-data" : "application/json",
-  };
+  const headers: Headers = new Headers();
+  if (body instanceof FormData) {
+    headers.append("Content-Type", "multipart/form-data");
+  } else {
+    headers.append("Content-Type", "application/json");
+  }
+
+  if (isProtected) {
+    const accessToken: String | null = SecureStorage.getAccessToken();
+    headers.append("Authorization", `Bearer ${accessToken}`);
+  }
+
+  // const headers: Headers = {
+  //   "Content-Type":
+  //     body instanceof FormData ? "multipart/form-data" : "application/json",
+  //     // "Authorization": isProtected ? SecureStorage.getAccessToken() : ''
+  // };
 
   const config: RequestInit = {
     method,
@@ -30,7 +43,53 @@ export const httpService = ({
         : undefined,
   };
 
-  return fetch(url, config);
+  return requestInterceptor(url, config, isProtected);
+};
+
+const requestInterceptor = async (
+  url: URL | "",
+  options: RequestInit,
+  isProtected: boolean
+) => {
+  const accessToken: String | null = SecureStorage.getAccessToken();
+  if (accessToken !== null && isProtected) {
+    const newHeaders = new Headers(options.headers);
+    newHeaders.delete("Authorization");
+    newHeaders.append("Authorization", `Bearer ${accessToken}`);
+    options.headers = newHeaders;
+  }
+
+  if (isProtected && accessToken !== null && isTokenExpired(accessToken)) {
+    const refreshToken: String | null = SecureStorage.getRefreshToken();
+    if (refreshToken) {
+      try {
+        const refreshUrl = generateUrlString(refreshTokenUrl, {});
+        const response = await fetch(refreshUrl, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        });
+        const result = await response.json();
+        if (response.ok && response.status === 200) {
+          SecureStorage.setRefreshToken(result.result.refreshToken);
+          SecureStorage.setAccessToken(result.result.accessToken);
+
+          const newHeaders = new Headers(options.headers);
+          newHeaders.delete("Authorization");
+          newHeaders.append("Authorization", `Bearer ${accessToken}`);
+          options.headers = newHeaders;
+        } else {
+          // TODO:: Handle the failuire and notify user about it.
+          throw new Error(`Request Failed with status ${response.status}`);
+        }
+      } catch (error) {
+        SecureStorage.removeToken();
+      }
+    }
+  }
+
+  return fetch(url, options);
 };
 
 // const fetchApi = (url: any, method: HttpMethod, body: any) => {

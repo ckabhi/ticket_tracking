@@ -93,3 +93,23 @@ export const generateUrlString = (
     return "";
   }
 };
+
+const getTokenExpiryDate = (jwtToken: String) => {
+  if (jwtToken) {
+    try {
+      const [, payload] = jwtToken.split(".");
+      const { exp: expires } = JSON.parse(window.atob(payload));
+      if (typeof expires === "number") {
+        return expires;
+      }
+    } catch {
+      return null;
+    }
+  }
+  return null;
+};
+
+export const isTokenExpired = (token: String) => {
+  const tokenExpiryDate = getTokenExpiryDate(token);
+  return tokenExpiryDate && Date.now() >= tokenExpiryDate * 1000;
+};
