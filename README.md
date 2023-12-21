@@ -28,22 +28,42 @@ Todo app with monolith architecture
     - ***ci***: (changes to CI configuration files and scripts)
 
 - Follow this message formate while doing commit
-- **_<type>:_** Add HTTP request status tracking in core action and reducer
+  - **_type:_** Add HTTP request status tracking in core action and reducer
 
   **Description:**
-    --- Implement functionality to track the status of HTTP requests within the core action and reducer.
-    --- Set up action types, action creators, and reducer logic to manage request statuses (in progress or completed).
-    --- Updated state management to reflect the status of ongoing or completed HTTP requests.
-    --- Improved the handling of asynchronous HTTP request actions using Redux.
+    <ul>
+      <li>
+        <p>Implement functionality to track the status of HTTP requests within the core action and reducer</p>
+      </li>
+      <li>
+        <p>Set up action types, action creators, and reducer logic to manage request statuses (in progress or completed).</p>
+      </li>
+      <li>
+        <p>Updated state management to reflect the status of ongoing or completed HTTP requests.</p>
+      </li>
+      <li>
+        <p>Improved the handling of asynchronous HTTP request actions using Redux.</p>
+      </li>
+    </ul>
 
   **Changes:**
-    --- Added new action types: REQUEST_START, REQUEST_SUCCESS, REQUEST_FAILURE.
-    --- Created action creators to dispatch request status updates.
-    --- Implemented reducer logic to manage and update request status in the state.
-    --- Enhanced state structure to incorporate request status tracking.
+    <ul>
+      <li>
+        <p>Added new action types: REQUEST_START, REQUEST_SUCCESS, REQUEST_FAILURE.</p>
+      </li>
+      <li>
+        <p>Created action creators to dispatch request status updates.</p>
+      </li>
+      <li>
+        <p>Implemented reducer logic to manage and update request status in the state.</p>
+      </li>
+      <li>
+        <p>Enhanced state structure to incorporate request status tracking.</p>
+      </li>
+    </ul>
 
   **Impact:**
-    --- Provides enhanced control and monitoring of HTTP requests within the application's Redux state.
-    --- Allows components to react to different request statuses (e.g., show loading spinners for ongoing requests, display success or error messages).
-    ---Improves overall user experience by managing asynchronous operations more effectively.
+    - Provides enhanced control and monitoring of HTTP requests within the application's Redux state.
+    - Allows components to react to different request statuses (e.g., show loading spinners for ongoing requests, display success or error messages).
+    - Improves overall user experience by managing asynchronous operations more effectively.
   
