@@ -1,6 +1,6 @@
 import { Middleware } from "@reduxjs/toolkit";
 import { getApiRegistry } from "../api/apiRegistry";
-import { HTTP_ERROR } from "../actionType/coreActionType";
+import { HTTP_ERROR, HTTP_REQUEST } from "../actionType/coreActionType";
 
 export const myMiddleware: Middleware =
   (storeAPI) => (next) => async (action) => {
@@ -13,6 +13,9 @@ export const myMiddleware: Middleware =
     const { fetchCall, onSuccess, onError, postOp } = apiHandler;
     try {
       next(action);
+      // Set http request status to true
+      next({ type: HTTP_REQUEST, payload: { action, inProgress: true } });
+
       const response = await fetchCall(action);
       const responseData = postOp(await response.json());
 
@@ -23,6 +26,9 @@ export const myMiddleware: Middleware =
           OnSuccessHandler.forEach((act) => {
             next(act);
           });
+
+          // Set http request status to false
+          next({ type: HTTP_REQUEST, payload: { action, inProgress: false } });
         }
       } else {
         // Execute error handler
@@ -37,6 +43,9 @@ export const myMiddleware: Middleware =
           });
         }
 
+        // Set http request status to false
+        next({ type: HTTP_REQUEST, payload: { action, inProgress: false } });
+
         // set httpError
         next({ type: HTTP_ERROR, payload: { isError: true, ...errorData } });
         setTimeout(() => {
@@ -44,6 +53,7 @@ export const myMiddleware: Middleware =
         }, 3000);
       }
     } catch (error) {
+      console.error("error");
       return next(action);
     }
     return;

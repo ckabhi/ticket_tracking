@@ -1,5 +1,5 @@
 import { createReducer } from "./baseReducer";
-import { HTTP_ERROR } from "../actionType/coreActionType";
+import { HTTP_ERROR, HTTP_REQUEST } from "../actionType/coreActionType";
 
 const default_state = {
   httpError: false,
@@ -18,4 +18,15 @@ const httpError = {
   },
 };
 
-export default createReducer({ httpError });
+const httpRequest = {
+  [HTTP_REQUEST]: (state: any, action: any) => {
+    const { payload } = action;
+    const data = { [payload.action.type]: payload.inProgress };
+    return {
+      ...state,
+      ...data,
+    };
+  },
+};
+
+export default createReducer({ httpError, httpRequest });
