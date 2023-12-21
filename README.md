@@ -13,19 +13,20 @@ Todo app with monolith architecture
 
 ## Commit message formate ##
 **Type**:
-    - ***feat***: (new feature for the user, not a new feature for build script)
-    - ***add***: (changes to add new capability or functions)
-    - ***cut***: (removing the capability or functions)
-    - ***fix***: (bug fix for the user, not a fix to a build script)
-    - ***style***: (formatting, missing semi colons, etc; no production code change)
-    - ***refactor***: (refactoring production code, eg. renaming a variable)
-    - ***docs***: (changes to the documentation)
-    - ***test***: (adding missing tests, refactoring tests; no production code change)
-    - ***chore***: (updating grunt tasks etc; no production code change)
-    - ***bump***: (increasing the versions or dependency versions)
-    - ***build***: (changes to build system or external dependencies)
-    - ***make***: (change to the build process, or tooling, or infra)
-    - ***ci***: (changes to CI configuration files and scripts)
+
+  - ***feat***: (new feature for the user, not a new feature for build script)
+  - ***add***: (changes to add new capability or functions)
+  - ***cut***: (removing the capability or functions)
+  - ***fix***: (bug fix for the user, not a fix to a build script)
+  - ***style***: (formatting, missing semi colons, etc; no production code change)
+  - ***refactor***: (refactoring production code, eg. renaming a variable)
+  - ***docs***: (changes to the documentation)
+  - ***test***: (adding missing tests, refactoring tests; no production code change)
+  - ***chore***: (updating grunt tasks etc; no production code change)
+  - ***bump***: (increasing the versions or dependency versions)
+  - ***build***: (changes to build system or external dependencies)
+  - ***make***: (change to the build process, or tooling, or infra)
+  - ***ci***: (changes to CI configuration files and scripts)
 
 - Follow this message formate while doing commit
   - **_type:_** Add HTTP request status tracking in core action and reducer
