@@ -1,12 +1,17 @@
-import { useSelector } from "react-redux";
+import { SecureStorage } from "../redux/store/store";
 
-export const checkUserAuthentication = () => {
-  const isUserAuthenticated =
-    useSelector((state: any) => state?.account?.isLogedIn) || false;
+/**
+ * TODO:: If token is valid then login status must be updated in the redux store
+ */
+export const checkUserAuthentication = (isLogedIn: boolean) => {
+  let isUserAuthenticated = isLogedIn;
+  if (!isUserAuthenticated && SecureStorage.getAccessToken()?.length) {
+    isUserAuthenticated = true;
+  }
   return isUserAuthenticated;
 };
 
-export const getToken = () => {
-  const token = useSelector((state: any) => state?.account?.token) || null;
-  return token;
-};
+// export const getToken = () => {
+//   const token = useSelector((state: any) => state?.account?.token) || null;
+//   return token;
+// };
