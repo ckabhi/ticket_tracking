@@ -6,13 +6,17 @@ import {
   saveUserDetails,
 } from "../../redux/action/account/account.action";
 import { userLoginRoute } from "../routes";
+import { SecureStorage } from "../../redux/store/store";
 
 const userLoginRequest = (action: any) => {
-  return httpService({
-    method: "POST",
-    path: userLoginRoute,
-    body: action?.payload,
-  });
+  return httpService(
+    {
+      method: "POST",
+      path: userLoginRoute,
+      body: action?.payload,
+    },
+    false
+  );
 };
 
 const onSuccess = (data: any) => [saveUserDetails(data)];
@@ -23,7 +27,16 @@ const execute = {
   onSuccess: onSuccess,
   onError: onError,
   postOp: (data: any) => {
-    return data?.result;
+    try {
+      const result = data?.result;
+      if (result) {
+        SecureStorage.setAccessToken(result.accessToken);
+        SecureStorage.setRefreshToken(result.refreshToken);
+      }
+      return data?.result;
+    } catch (error) {
+      return data?.result;
+    }
   },
 };
 registerApiHandler(USER_LOGIN, execute);

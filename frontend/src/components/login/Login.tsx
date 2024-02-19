@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+// import FormControlLabel from "@mui/material/FormControlLabel";
+// import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -9,22 +9,18 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 interface UserAuthTypes {
-  authType: string;
   changeHandler: any;
   formData: any;
   submitHandler: any;
   authTypeChangeHandler: any;
-  rememberPasswordHandler?: any;
   forgetPasswordHandler: any;
 }
 const UserAuth = (props: UserAuthTypes) => {
   const {
-    authType,
     changeHandler,
     formData,
     submitHandler,
     authTypeChangeHandler,
-    rememberPasswordHandler,
     forgetPasswordHandler,
   } = props;
 
@@ -70,10 +66,10 @@ const UserAuth = (props: UserAuthTypes) => {
             onChange={changeHandler}
             value={formData["password"]}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
           <Button
             type="button"
             fullWidth

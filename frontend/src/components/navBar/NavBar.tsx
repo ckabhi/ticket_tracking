@@ -16,9 +16,9 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Button from "@mui/material/Button";
-import { checkUserAuthentication } from "../../helper/checkAuthentication";
 import { useDispatch } from "react-redux";
 import { userLogout } from "../../redux/action/account/account.action";
+import GuardComponent from "../common/GuardComponent";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -76,7 +76,6 @@ export default function NavBar() {
 
   const dispatch = useDispatch();
 
-  const authenticated = checkUserAuthentication();
   const handleLogout = () => {
     console.log("User Logout");
     dispatch(userLogout("null"));
@@ -184,7 +183,7 @@ export default function NavBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {authenticated && (
+          <GuardComponent>
             <IconButton
               size="large"
               edge="start"
@@ -194,7 +193,8 @@ export default function NavBar() {
             >
               <MenuIcon />
             </IconButton>
-          )}
+          </GuardComponent>
+
           <Typography
             variant="h6"
             noWrap
@@ -203,7 +203,8 @@ export default function NavBar() {
           >
             Todo
           </Typography>
-          {authenticated ? (
+
+          <GuardComponent>
             <>
               <Search>
                 <SearchIconWrapper>
@@ -259,14 +260,13 @@ export default function NavBar() {
                 </IconButton>
               </Box>
             </>
-          ) : (
-            <>
-              <Box sx={{ flexGrow: 1 }} />
+          </GuardComponent>
+          <>
+            {/* <Box sx={{ flexGrow: 1 }} />
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <Button color="inherit">LogIn</Button>
-              </Box>
-            </>
-          )}
+              </Box> */}
+          </>
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
