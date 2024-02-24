@@ -144,3 +144,26 @@ export const refreshAccessToken = async (
       .json(ResponseBuilder.errorResponse("somthing went wrong", error));
   }
 };
+
+export const removeAllRefreshToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { _id } = res.locals._user;
+    await inValidateRefreshToken(_id, "all");
+
+    return res
+      .status(SUCCESS)
+      .json(
+        ResponseBuilder.successResponse({
+          message: "You have been loged out successfully",
+        })
+      );
+  } catch (error) {
+    return res
+      .status(SERVER_ERROR)
+      .json(ResponseBuilder.errorResponse("Somthing went wrong", error));
+  }
+};

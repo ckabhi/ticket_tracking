@@ -3,6 +3,7 @@ import {
   authentication,
   refreshAccessToken,
   verifyToken,
+  removeAllRefreshToken,
 } from "../../middleware/AuthProvider.middleware";
 import {
   authenticateUser,
@@ -25,6 +26,8 @@ route.get("/", async (req: Request, res: Response) => {
 route.post("/create", checkDuplicate, registerAccount, authentication);
 
 route.post("/login", authenticateUser, authentication);
+
+route.post("/logout", verifyToken, removeAllRefreshToken);
 
 route.put("/profile", verifyToken, updateProfile);
 
