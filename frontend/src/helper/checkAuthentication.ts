@@ -5,7 +5,8 @@ import { SecureStorage } from "../redux/store/store";
  */
 export const checkUserAuthentication = (isLogedIn: boolean) => {
   let isUserAuthenticated = isLogedIn;
-  if (!isUserAuthenticated && SecureStorage.getAccessToken()?.length) {
+  const accessToken = SecureStorage.getAccessToken();
+  if (!isUserAuthenticated && accessToken?.length) {
     isUserAuthenticated = true;
   }
   return isUserAuthenticated;

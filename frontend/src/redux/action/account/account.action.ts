@@ -4,6 +4,7 @@ import {
   USER_LOGOUT,
 } from "../../actionType/actionType";
 import "./../../../api/account/UserLogin";
+import "./../../../api/account/UserLogout";
 
 export const userLogin = (data: any) => {
   return {
