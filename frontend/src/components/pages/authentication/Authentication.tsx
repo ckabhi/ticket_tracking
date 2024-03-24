@@ -2,19 +2,29 @@ import { useEffect, useState } from "react";
 import UserAuth from "../../login/Login";
 import NavBar from "../../navBar/NavBar";
 import { useDispatch } from "react-redux";
-import { userLogin } from "../../../redux/action/account/account.action";
+import {
+  userLogin,
+  userSignup,
+} from "../../../redux/action/account/account.action";
 import { useSelector } from "react-redux";
 import SignUp from "../../signup/Signup";
 import { checkUserAuthentication } from "../../../helper/checkAuthentication";
 import pathConstant from "../../../routes/pathConstant";
 import { useNavigate } from "react-router-dom";
+import {
+  IAuthFormState,
+  ILoginPayload,
+  ISignupPayload,
+} from "../../../ts/interfaces/account.interface";
+import { TAuthType } from "../../../ts/types/account.types";
 
 const Authentication = () => {
   const navigate = useNavigate();
   const logedinStatus =
     useSelector((state: any) => state?.account?.isLogedIn) || false;
-  const [authType, setAuthType] = useState("signin");
-  const [formData, setFormData] = useState({
+  const [authType, setAuthType] = useState<TAuthType>("signin");
+  const [formData, setFormData] = useState<IAuthFormState>({
+    name: "",
     email: "",
     password: "",
   });
@@ -38,23 +48,40 @@ const Authentication = () => {
 
   const handleSubmitClick = (e: any) => {
     if (validateFormData(authType)) {
-      const payload = {
-        email: formData.email,
-        password: formData.password,
-      };
-
-      dispatch(userLogin(payload));
-      console.log("STATE_DATA", stateData);
+      if (authType === "signin") {
+        const payload: ILoginPayload = {
+          email: formData.email,
+          password: formData.password,
+        };
+        dispatch(userLogin(payload));
+      }
+      if (authType === "signup") {
+        const payload: ISignupPayload = {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        };
+        dispatch(userSignup(payload));
+        console.log("payload", payload);
+      }
     }
   };
 
-  const validateFormData = (authType: string) => {
+  const validateFormData = (authType: TAuthType) => {
     switch (authType) {
       case "signin":
         if (formData.email.trim() == "" || formData.password.trim() == "")
           return false;
         return true;
 
+      case "signup":
+        if (
+          formData.email.trim() === "" ||
+          formData.password.trim() === "" ||
+          formData.name === ""
+        )
+          return false;
+        return true;
       default:
         return false;
     }
