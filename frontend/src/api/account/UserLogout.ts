@@ -4,6 +4,8 @@ import { USER_LOGOUT } from "../../redux/actionType/actionType";
 import { SecureStorage } from "../../redux/store/store";
 import { userLogout as userLogoutRoutes } from "../routes";
 import { userLogout } from "../../redux/action/account/account.action";
+import { redirectTo } from "../../redux/action/utility/utility.action";
+import pathConstant from "../../routes/pathConstant";
 
 const userLogoutRequest = (action: any) => {
   return httpService(
@@ -15,8 +17,13 @@ const userLogoutRequest = (action: any) => {
   );
 };
 
-const onSuccess = (data: any) => [userLogout(data)];
-const onError = (error: any) => [];
+const onSuccess = (data: any) => [
+  userLogout(data),
+  redirectTo({ path: pathConstant.LOGIN, replace: true }),
+];
+const onError = (error: any) => [
+  redirectTo({ path: pathConstant.LOGIN, replace: true }),
+];
 
 const execute = {
   fetchCall: userLogoutRequest,

@@ -17,6 +17,7 @@ import {
   ISignupPayload,
 } from "../../../ts/interfaces/account.interface";
 import { TAuthType } from "../../../ts/types/account.types";
+import { redirectTo } from "../../../redux/action/utility/utility.action";
 
 const Authentication = () => {
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ const Authentication = () => {
     if (checkUserAuthentication(logedinStatus)) {
       navigate(pathConstant.HOME);
     }
-  }, [logedinStatus]);
+  }, []);
 
   return (
     <>

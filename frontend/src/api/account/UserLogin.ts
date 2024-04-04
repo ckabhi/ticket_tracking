@@ -7,6 +7,8 @@ import {
 } from "../../redux/action/account/account.action";
 import { userLoginRoute } from "../routes";
 import { SecureStorage } from "../../redux/store/store";
+import { redirectTo } from "../../redux/action/utility/utility.action";
+import pathConstant from "../../routes/pathConstant";
 
 const userLoginRequest = (action: any) => {
   return httpService(
@@ -19,7 +21,10 @@ const userLoginRequest = (action: any) => {
   );
 };
 
-const onSuccess = (data: any) => [saveUserDetails(data)];
+const onSuccess = (data: any) => [
+  saveUserDetails(data),
+  redirectTo({ path: pathConstant.HOME }),
+];
 const onError = (error: any) => [];
 
 const execute = {
