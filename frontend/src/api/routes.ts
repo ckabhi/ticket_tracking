@@ -1,5 +1,5 @@
-export const getTodos = "todos";
-export const getTodoDetails = "todos/:userId";
+export const getTodos = "dashboard/todos";
+export const getTodoDetails = "dashboard/todos/:itemId";
 
 // Account routes
 export const userLoginRoute = "account/login";

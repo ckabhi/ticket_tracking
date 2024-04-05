@@ -1,11 +1,11 @@
-import { FETCH_TODO_DETAILS } from "../redux/actionType/actionType";
+import { FETCH_TODO_DETAILS } from "../../redux/actionType/actionType";
 import {
   saveFetchedTodoDetails,
   fetchTodoDetailsError,
-} from "../redux/action/todos/todos.action";
-import { registerApiHandler } from "../core/api/apiRegistry";
-import { httpService } from "../core/api/HttpClient";
-import { getTodoDetails } from "./routes";
+} from "../../redux/action/todos/todos.action";
+import { registerApiHandler } from "../../core/api/apiRegistry";
+import { httpService } from "../../core/api/HttpClient";
+import { getTodoDetails } from "../routes";
 
 const fetchTodoDetails = (action: any) => {
   return httpService({

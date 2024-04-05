@@ -11,8 +11,8 @@ import {
   TodoDetails,
   TodoDetailsPayload,
 } from "../../../ts/interfaces/todo.interface";
-import "./../../../api/GetTodoDetails";
-import "./../../../api/GetTodoList";
+import "../../../api/dashboard/GetTodoDetails";
+import "../../../api/dashboard/GetTodoList";
 
 export const fetchTodoDetails = (payload: TodoDetailsPayload) => {
   return {
@@ -35,9 +35,10 @@ export const fetchTodoDetailsError = (error: any) => {
   };
 };
 
-export const fetchTodoList = () => {
+export const fetchTodoList = (page = 1, limit = 10) => {
   return {
     type: REQUEST_TODO_LIST,
+    query: { page, limit },
   };
 };
 

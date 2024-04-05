@@ -1,11 +1,11 @@
-import { REQUEST_TODO_LIST } from "../redux/actionType/actionType";
+import { REQUEST_TODO_LIST } from "../../redux/actionType/actionType";
 import {
   saveTodoList,
   errorTodoList,
-} from "../redux/action/todos/todos.action";
-import { registerApiHandler } from "../core/api/apiRegistry";
-import { httpService } from "../core/api/HttpClient";
-import { getTodos } from "./routes";
+} from "../../redux/action/todos/todos.action";
+import { registerApiHandler } from "../../core/api/apiRegistry";
+import { httpService } from "../../core/api/HttpClient";
+import { getTodos } from "../routes";
 
 const fetchTodoList = (action: any) => {
   return httpService({
