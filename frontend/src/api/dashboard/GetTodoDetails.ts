@@ -22,7 +22,7 @@ const execute = {
   onSuccess: onSuccess,
   onError: onError,
   postOp: (data: any) => {
-    return data;
+    return data?.result;
   },
 };
 registerApiHandler(FETCH_TODO_DETAILS, execute);
