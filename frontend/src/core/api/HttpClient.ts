@@ -1,4 +1,4 @@
-import { RequestOptions } from "../interface/HttpInterface";
+import { RequestOptions } from "../interface/HttpRequest.interface";
 import { generateUrlString, isTokenExpired } from "./HttpUtils";
 import { SecureStorage } from "../../redux/store/store";
 import { refreshToken as refreshTokenUrl } from "../../api/routes";
@@ -178,7 +178,7 @@ const refreshTokenIfNeeded = async (options: RequestInit) => {
 
 export const httpService = async (
   { method, path, routeParameters = {}, body = {} }: RequestOptions,
-  isProtected = false
+  isProtected: boolean = true
 ) => {
   const url = generateUrlString(path, routeParameters);
   const headers = createHeaders(body);

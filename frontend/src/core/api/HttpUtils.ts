@@ -1,4 +1,4 @@
-import { RouteParametersType } from "../interface/HttpInterface";
+import { RouteParametersType } from "../interface/HttpRequest.interface";
 import {
   PROTOCOL,
   ORIGIN,

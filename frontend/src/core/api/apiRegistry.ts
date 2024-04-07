@@ -1,4 +1,7 @@
-import { ApiRegistryType, OptionsType } from "../interface/HttpInterface";
+import {
+  ApiRegistryType,
+  OptionsType,
+} from "../interface/HttpRequest.interface";
 
 let API_REGISTRY: ApiRegistryType = {};
 

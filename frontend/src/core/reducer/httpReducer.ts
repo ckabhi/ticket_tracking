@@ -1,15 +1,16 @@
 import { createReducer } from "./baseReducer";
 import { HTTP_ERROR, HTTP_REQUEST } from "../actionType/coreActionType";
+import { HttpRequestStatus } from "../interface/HttpAction.interface";
+import { HttpRequestActionReturnData } from "../interface/HttpAction.interface";
 
-const default_state = {
-  httpError: false,
-  errorCode: null,
-  errorMessage: null,
-};
+const default_state: HttpRequestStatus = {};
 
 const httpError = {
   [HTTP_ERROR]: (state: any = default_state, action: any) => {
     const { payload } = action;
+    return {
+      ...state,
+    };
     return {
       httpError: payload?.isError || false,
       errorCode: payload?.errorCode || null,
@@ -19,9 +20,18 @@ const httpError = {
 };
 
 const httpRequest = {
-  [HTTP_REQUEST]: (state: any, action: any) => {
+  [HTTP_REQUEST]: (
+    state: HttpRequestStatus = default_state,
+    action: HttpRequestActionReturnData
+  ) => {
     const { payload } = action;
-    const data = { [payload.action.type]: payload.inProgress };
+    const data = {
+      [payload.action.type]: {
+        status: payload.status,
+        statusCode: payload?.statusCode,
+        errorMessage: payload?.errorMessage,
+      },
+    };
     return {
       ...state,
       ...data,
