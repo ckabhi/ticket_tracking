@@ -20,3 +20,8 @@ export const getApiRegistry = (actionType: string) => {
   if (Object.hasOwn(API_REGISTRY, actionType)) return API_REGISTRY[actionType];
   return null;
 };
+
+export const apiRegistryHas = (actionType: string) => {
+  if (Object.hasOwn(API_REGISTRY, actionType)) return true;
+  return false;
+};

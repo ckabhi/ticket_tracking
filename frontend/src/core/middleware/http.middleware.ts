@@ -1,5 +1,5 @@
 import { Middleware } from "@reduxjs/toolkit";
-import { getApiRegistry } from "../api/apiRegistry";
+import { getApiRegistry, apiRegistryHas } from "../api/apiRegistry";
 import { HTTP_REQUEST } from "../actionType/coreActionType";
 import { HttpRequestStatusData } from "../interface/HttpAction.interface";
 
@@ -10,11 +10,20 @@ import { HttpRequestStatusData } from "../interface/HttpAction.interface";
  * @param {[]} onSuccess list of actions that will be dispatch one by one
  * @param next next function
  */
-const handleSuccess = (responseData: any, onSuccess: any, next: any) => {
+const handleSuccess = (
+  responseData: any,
+  onSuccess: any,
+  next: any,
+  storeApi: any
+) => {
   const OnSuccessHandler = onSuccess(responseData);
   if (Array.isArray(OnSuccessHandler)) {
     OnSuccessHandler.forEach((act: any) => {
-      next(act);
+      if (apiRegistryHas(act?.type)) {
+        storeApi.dispatch(act);
+      } else {
+        next(act);
+      }
     });
   }
 };
@@ -26,7 +35,12 @@ const handleSuccess = (responseData: any, onSuccess: any, next: any) => {
  * @param {[]} onError list of actions that will be dispatch one by one
  * @param next next function
  */
-const handleError = (response: Response, onError: any, next: any) => {
+const handleError = (
+  response: Response,
+  onError: any,
+  next: any,
+  storeApi: any
+) => {
   const errorData = {
     errorCode: response.status,
     errorMessage: Object.keys(response).length ? response : "",
@@ -34,7 +48,11 @@ const handleError = (response: Response, onError: any, next: any) => {
   const OnErrorHandler = onError(errorData);
   if (Array.isArray(OnErrorHandler)) {
     OnErrorHandler.forEach((err: any) => {
-      next(err);
+      if (apiRegistryHas(err?.type)) {
+        storeApi.dispatch(err);
+      } else {
+        next(err);
+      }
     });
   }
   // next({ type: HTTP_ERROR, payload: { isError: true, ...errorData } });
@@ -50,7 +68,12 @@ const handleError = (response: Response, onError: any, next: any) => {
  * @param {Object} apiHandler api handler object consist of onSuccess, onError and postOp
  * @param next next function
  */
-const executeApiCall = async (action: any, apiHandler: any, next: any) => {
+const executeApiCall = async (
+  action: any,
+  apiHandler: any,
+  next: any,
+  storeApi: any
+) => {
   const httpRequestStatusData: HttpRequestStatusData = {
     status: "started",
     statusCode: null,
@@ -70,13 +93,13 @@ const executeApiCall = async (action: any, apiHandler: any, next: any) => {
       httpRequestStatusData.status = "success";
 
       // Handle success action
-      handleSuccess(responseData, apiHandler.onSuccess, next);
+      handleSuccess(responseData, apiHandler.onSuccess, next, storeApi);
     } else {
       httpRequestStatusData.status = "error";
       httpRequestStatusData.errorMessage = JSON.stringify(response?.message);
 
       // Handle error action
-      handleError(response, apiHandler.onError, next);
+      handleError(response, apiHandler.onError, next, storeApi);
     }
   } catch (error) {
     console.error(error);
@@ -97,7 +120,7 @@ export const myMiddleware: Middleware =
       return next(action);
     }
 
-    await executeApiCall(action, apiHandler, next);
+    await executeApiCall(action, apiHandler, next, storeAPI);
   };
 
 /*
