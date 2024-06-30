@@ -3,6 +3,7 @@ import {
   FETCH_TODO_DETAILS,
   FETCH_TODO_DETAILS_ERROR,
   NOT_API_CALL,
+  REQUEST_ADD_TODO,
   REQUEST_TODO_LIST,
   SAVE_FETCHED_TODO_DETAILS,
   SAVE_TODO_LIST,
@@ -13,6 +14,7 @@ import {
 } from "../../../ts/interfaces/todo.interface";
 import "../../../api/dashboard/GetTodoDetails";
 import "../../../api/dashboard/GetTodoList";
+import "../../../api/dashboard/AddTodo";
 
 export const fetchTodoDetails = (payload: TodoDetailsPayload) => {
   return {
@@ -60,5 +62,12 @@ export const notApiCall = (data: any) => {
   return {
     type: NOT_API_CALL,
     data: data,
+  };
+};
+
+export const addTodo = (data: any) => {
+  return {
+    type: REQUEST_ADD_TODO,
+    payload: data,
   };
 };

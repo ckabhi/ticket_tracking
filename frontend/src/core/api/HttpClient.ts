@@ -169,10 +169,12 @@ const refreshTokenIfNeeded = async (options: RequestInit) => {
     } else {
       SecureStorage.removeToken();
       throw new Error(`Request Failed with status ${response.status}`);
+      //TODO:: dispath redirect
     }
   } catch (error) {
     SecureStorage.removeToken();
     throw new Error("Token Refresh Failed");
+    //TODO:: dispath redirect
   }
 };
 

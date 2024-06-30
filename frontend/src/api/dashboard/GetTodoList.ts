@@ -5,12 +5,12 @@ import {
 } from "../../redux/action/todos/todos.action";
 import { registerApiHandler } from "../../core/api/apiRegistry";
 import { httpService } from "../../core/api/HttpClient";
-import { getTodos } from "../routes";
+import { todos } from "../routes";
 
 const fetchTodoList = (action: any) => {
   return httpService({
     method: "GET",
-    path: getTodos,
+    path: todos,
     routeParameters: action?.query,
   });
 };

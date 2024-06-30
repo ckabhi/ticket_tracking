@@ -17,3 +17,8 @@ export interface SaveTodoDetailsAction {
   type: string;
   data: TodoDetails;
 }
+
+export interface IAddTodoFormData {
+  title: string;
+  description?: string;
+}

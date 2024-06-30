@@ -1,4 +1,4 @@
-export const getTodos = "dashboard/todos";
+export const todos = "dashboard/todos";
 export const getTodoDetails = "dashboard/todos/:itemId";
 
 // Account routes

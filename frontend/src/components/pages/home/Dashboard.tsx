@@ -1,6 +1,9 @@
 import { useEffect, useState, useId } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTodoList } from "../../../redux/action/todos/todos.action";
+import {
+  addTodo,
+  fetchTodoList,
+} from "../../../redux/action/todos/todos.action";
 import {
   Container,
   List,
@@ -10,11 +13,48 @@ import {
   Checkbox,
   Typography,
   IconButton,
+  TextField,
+  InputBase,
 } from "@mui/material";
 import {
   ExpandMore as ExpandMoreIcon,
   Delete as DeleteIcon,
+  AddCircleOutline,
 } from "@mui/icons-material";
+import { styled, alpha, useTheme } from "@mui/material/styles";
+import { IAddTodoFormData } from "../../../ts/interfaces/todo.interface";
+import { defaultTodoFormData } from "../../../constant/defaultValue";
+
+const AddTodo = styled(ListItem)(({ theme }) => ({
+  border: "dashed 1px grey",
+  backgroundColor: "beige",
+}));
+const TodoInput1 = styled(TextField)(({ theme }) => ({
+  flex: `1`,
+  minWidth: 0,
+  marginTop: "4px",
+  marginBottom: "4px",
+}));
+const TodoInputWrapper = styled("div")(({ theme }) => ({
+  position: "relative",
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  flex: 1,
+}));
+
+const StyledInput = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  width: "100%",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    transition: theme.transitions.create("width"),
+    width: "100%",
+  },
+}));
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -22,6 +62,8 @@ const Dashboard = () => {
 
   const [selectAll, setSelectAll] = useState(false);
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const [todoData, setTodoData] =
+    useState<IAddTodoFormData>(defaultTodoFormData);
 
   useEffect(() => {
     dispatch(fetchTodoList(1, 10));
@@ -56,6 +98,20 @@ const Dashboard = () => {
 
   const getRowColor = (index: number) => {
     return index % 2 === 0 ? "#ffffff" : "#f9f9f9"; // Alternating white and light gray background colors
+  };
+
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    const name = event?.target?.name;
+    const value = event?.target?.value;
+    console.log({ [name]: value });
+    setTodoData({ ...todoData, [name]: value });
+  };
+
+  const handleTodoAdd = () => {
+    dispatch(addTodo(todoData));
+    setTodoData(defaultTodoFormData);
   };
 
   return (
@@ -103,6 +159,25 @@ const Dashboard = () => {
               </ListItem>
             );
           })}
+        <AddTodo>
+          <ListItemIcon>
+            <Checkbox disabled />
+          </ListItemIcon>
+          <TodoInputWrapper>
+            <StyledInput
+              name="title"
+              value={todoData.title}
+              placeholder="Add Todo Item"
+              onChange={handleInputChange}
+            />
+          </TodoInputWrapper>
+          <IconButton
+            onClick={handleTodoAdd}
+            disabled={todoData.title.trim().length > 0 ? false : true}
+          >
+            <AddCircleOutline />
+          </IconButton>
+        </AddTodo>
       </List>
     </Container>
   );
